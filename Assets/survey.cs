@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
-using TreeEditor;
+using System.Drawing;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class survey : MonoBehaviour
 {
@@ -34,8 +35,10 @@ public class survey : MonoBehaviour
         {
             GameObject hi = Instantiate(cube);
             cubes.Add(hi.transform);
-            hi.GetComponent<MeshRenderer>().material.color = new Color(map(i,-15,15,0,1),0,0,1);
-        //Debug.Log(map(i,-15,15,-5,10)+"Mapping from -5 to 10");
+            hi.GetComponent<MeshRenderer>().material.color = new Vector4(map(i,0,50,0,1),0,0,1);
+            hi.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", new Vector4(map(i, 0, 50, 0, 1), 0, 0, 1));
+
+            //Debug.Log(map(i,-15,15,-5,10)+"Mapping from -5 to 10");
         }
     }
 
@@ -51,7 +54,7 @@ public class survey : MonoBehaviour
         
         steppers += 100*Time.deltaTime/9.009f;  
 
-        if(steppers> 10000 * Time.deltaTime / 9.009f)
+ /*       if(steppers> 10000 * Time.deltaTime / 9.009f)
         {
             print("dfojd");
             steppers = 0;
@@ -61,7 +64,7 @@ public class survey : MonoBehaviour
                 rpoints[i] = UnityEngine.Random.Range(0,10f);
             }
 
-        }    
+        }    */
         for(int i = 0; i<curre.Length;i++){   
         lerps[i] = math.lerp(curre[i],rpoints[i],steppers/(10000 * Time.deltaTime / 9.009f));
         }
@@ -76,7 +79,7 @@ public class survey : MonoBehaviour
                 s2*=math.cos(x+lerps[j]*0.5f);
             }
             float y = math.clamp(-50.1f*s,-20,20);//13+(x*x*-1/10f);
-            cubes[i].position = new Vector3(x,y,30*s2*y);
+            cubes[i].position = new Vector3(x,y,30*s2*y/2.2143343f);
         }
 
     }
