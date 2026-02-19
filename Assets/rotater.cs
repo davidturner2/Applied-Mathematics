@@ -19,7 +19,7 @@ public class rotater : MonoBehaviour
     {
         for (int i = 0; i < keys.Length; i++)
         {
-            keys[i].rotation = Quaternion.Euler(new Vector3(0, keys[i].rotation.eulerAngles.y, -7f *math.abs(math.pow(math.cos(1f*Time.time+i+(1*0.01f *math.PI)),20))));
+            keys[i].localRotation = Quaternion.Euler(new Vector3(0, 0, -7f *math.abs(math.pow(math.cos(1f*Time.time+i+(1*0.01f *math.PI)),20))));
         }
     }
 }
