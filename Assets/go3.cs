@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class go3 : MonoBehaviour
 {
@@ -29,15 +32,36 @@ public class go3 : MonoBehaviour
     {
         transform.Rotate(r2 * r * Time.deltaTime);
         steppers += 100 * Time.deltaTime / 41.009f;
-
+        float t = steppers;
 
 
 
 
         float x = step + xinterval.x + steppers;
-        float y = 1 - ((1f) / (60f)) * x * (x + 4) * (x - 6);
-        transform.localRotation = Quaternion.Euler(new Vector3(40f * math.sin(x * 3), 0, 90));
+        float y = F(x);
+        float yprime = G(x);
 
+        float j = -2.3f;
+
+        float F(float x)
+        {
+            return 1- ((1f) / (60f)) * x * (x + 4f) * (x - 6f);
+        }
+
+        float G(float x)
+        {
+            return -(3f*x*x)/60f+2f*x/60f+0.4f;
+        }
+
+
+        
+        
+        float p = F(j) - (1 / G(j)) * (x - j);
+
+        Vector3 normal = (new Vector3(0,0, y-(1f/yprime)*(0f-x))-new Vector3(1f,0, y-(1f/yprime)*(1f-x))).normalized;
+        print(normal);
+        //transform.localRotation = Quaternion.Euler(new Vector3(70f * math.sin(x * 3), 0, normal));
+        transform.localRotation = Quaternion.Euler(normal);
         transform.localPosition = new Vector3(x, y, 0);
 
         if (x > xinterval.y)
