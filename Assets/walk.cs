@@ -19,6 +19,8 @@ public class walk : MonoBehaviour
     bool um = false;
     Quaternion HELPMEEEE;
     Vector3 gravity = Physics.gravity;
+    Vector3 notm = Vector3.zero;
+    Vector3 fake = Vector3.up;
     public GameObject sonicforces;
     public void Awake()
     {
@@ -100,13 +102,15 @@ public class walk : MonoBehaviour
            
             
       }
-        Vector3 appliedforce = child.transform.rotation * ad * 20f;
+        Vector3 appliedforce = child.transform.rotation * ad * 40f;
         r.AddForce(appliedforce);
         r.AddForce(gravity);
 
        
         sonicforces.transform.GetChild(0).GetComponent<LineRenderer>().SetPosition(1,gravity*0.2f);
         sonicforces.transform.GetChild(1).GetComponent<LineRenderer>().SetPosition(1, appliedforce * 0.2f);
+        sonicforces.transform.GetChild(3).GetComponent<LineRenderer>().SetPosition(1, 0.6f* -r.linearVelocity*0.2f);
+        sonicforces.transform.GetChild(2).GetComponent<LineRenderer>().SetPosition(1, fake*gravity.magnitude*0.2f);
        // print(gravity);
         // acceleration
         speed += 0.2f;
@@ -131,34 +135,37 @@ public class walk : MonoBehaviour
         }
         //start raycast
                 RaycastHit down;
+   
             Vector3 movetothis = child.transform.position+ child.transform.rotation*new Vector3(0,1,0);
             //Vector3 ra = new Vector3(movetothis.x - 0.3f, movetothis.y + 0.3f, movetothis.z);
        if (Physics.Raycast(movetothis, child.transform.rotation*(Vector3.down), out down, 2f))
         {
+      
             Vector3 slidebox =-Vector3.Normalize(Vector3.Cross(down.normal, Vector3.right));
-            Vector3 hihihi = Vector3.Dot(Vector3.down, slidebox) * slidebox;
-            Debug.DrawRay(movetothis, hihihi);
+            //Vector3 hihihi = Vector3.Dot(Vector3.down, slidebox) * slidebox;
             Debug.DrawRay(movetothis, slidebox,Color.red);
-            sonicforces.transform.GetChild(2).GetComponent<LineRenderer>().SetPosition(1, down.normal * 0.2f);
-            sonicforces.transform.GetChild(3).GetComponent<LineRenderer>().SetPosition(1, down.collider.material.dynamicFriction* -appliedforce*0.2f);
+            fake =Vector3.Magnitude(appliedforce)*down.normal * 0.2f;
             // raycast detects a collider that is a curve then set curve to true else false
             print(Vector3.Distance(Vector3.Dot(9.8f * Vector3.down, slidebox) * slidebox, Vector3.zero) < 0.7f);
             if (down.collider.tag == "curve"){
                 curve = true;
-                if (Vector3.Distance(Vector3.Dot(9.8f * Vector3.down, slidebox) * slidebox, Vector3.zero) < 0.7f)
+                //if (Vector3.Distance(Vector3.Dot(9.8f * Vector3.down, slidebox) * slidebox, Vector3.zero) < 0.7f)
+                if (false)
                 {
                     gravity = Physics.gravity;
                 }
                 else
                 {
-                    gravity = Vector3.Dot(9.8f * Vector3.down, slidebox) * slidebox;
+                    gravity = Vector3.Dot(30.8f * Vector3.down, slidebox) * slidebox;
                 }
          
 
 
             }
             else{
+                notm = Vector3.zero;
                 curve = false;
+                fake= Vector3.up;
                 //gravity = Vector3.Dot(9.8f * Vector3.down, slidebox) * slidebox;
                 gravity = Physics.gravity;
     
@@ -196,7 +203,7 @@ public class walk : MonoBehaviour
             }
             isGrounded = false;
 
-            r.AddForce(Vector2.up * 50, ForceMode.Impulse);
+            r.AddForce(Vector2.up * 20f, ForceMode.Impulse);
         }
     }
 
